@@ -29,7 +29,6 @@ public class SectionService {
 	@Transactional
 	public void subSection(Long lineId, Long stationId) {
 		Line line = lineRepository.findById(lineId).orElseThrow(() -> new SubwayException("no subway"));
-		Section section = line.subSection(stationId);
-		sectionRepository.delete(section);
+		line.subSection(stationId);
 	}
 }

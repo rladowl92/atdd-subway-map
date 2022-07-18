@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,8 +32,8 @@ public class Line {
 	@OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
 	private List<Section> sections = new ArrayList<>();
 
-	@Builder
-	public Line(String name, String color, Long upStationId, Long downStationId, Long distance) {
+	@Builder(access = AccessLevel.PRIVATE)
+	private Line(String name, String color, Long upStationId, Long downStationId, Long distance) {
 		this.name = name;
 		this.color = color;
 		addSection(upStationId, downStationId, distance);
@@ -58,14 +59,12 @@ public class Line {
 		}
 	}
 
-	public Section subSection(Long downStationId) {
+	public void subSection(Long downStationId) {
 		validateSubSection(downStationId);
 
 		int lastIndex = this.sections.size() - 1;
 		Section lastSection = this.sections.get(lastIndex);
 		this.sections.remove(lastSection);
-
-		return lastSection;
 	}
 
 	private void validateSubSection(Long downStationId) {
